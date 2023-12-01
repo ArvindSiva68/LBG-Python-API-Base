@@ -39,7 +39,7 @@ def item_builder(item_name: str, item_description: str, item_power_level: int, i
     item: dict[str | int | float] = {
         "name": item_name,
         "description": item_description,
-        "power_level" : item_power_level
+        "power_level" : item_power_level,
         "price": item_price,
         "_id": item_id,
     }
