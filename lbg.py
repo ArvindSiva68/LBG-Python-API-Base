@@ -58,7 +58,7 @@ def create_table():
     """
     filepath = 'data.db'
     if os.path.exists(filepath):
-        os.remove(file_path)
+        os.remove(filepath)
 
         print("File has been deleted.")
         db.create_all()
