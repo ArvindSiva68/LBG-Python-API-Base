@@ -14,11 +14,11 @@ class ItemModel(db.Model):
 
     _id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(TEXT))
-    powerlevel= db.Column(db.Integer)
+    powerlevel= db.Column(db.String(TEXT))
     name = db.Column(db.String(STRING))
     price = db.Column(db.Float())
 
-    def __init__(self, _id: int, description: str, powerlevel: int, name: str, price: float):
+    def __init__(self, _id: int, description: str, powerlevel: str, name: str, price: float):
         """
         class constructor
         """
