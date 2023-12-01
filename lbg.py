@@ -29,6 +29,8 @@ db.init_app(app)
 # global variable for id (module private; also avoids standard library function reference collision)
 _id = 1
 
+#import os
+import os
 
 def item_builder(item_name: str, item_description: str, item_powerlevel: str, item_price: float, item_id: int) -> dict:
     """
@@ -54,8 +56,14 @@ def create_table():
     Note. If API non-persistence required, data DB will need to be reset (API controls id statelessly)
     i.e. no db look up for max id value for restart.  A possible enhancement.
     """
-    db.create_all()
+    filepath = 'data.db'
+    if os.path.exists(filepath):
+        os.remove(file_path)
 
+        print("File has been deleted.")
+        db.create_all()
+    else:
+        db.create_all()
 
 @app.route('/create', methods=['POST'])
 def create():
