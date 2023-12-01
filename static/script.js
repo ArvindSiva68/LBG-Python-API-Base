@@ -57,6 +57,7 @@ const getOne = () => {
 const put = () => { 
   axios.put(`/update/${DOM.inputUpdateID.value}`, { name : DOM.inputUpdateName.value,
                                                     description : DOM.inputUpdateDescription.value,
+                                                    powerlevel : DOM.inputUpdatePowerlevel.value,
                                                     price : DOM.inputUpdatePrice.value})
     .then((response) => {
      console.log(response);
