@@ -41,7 +41,7 @@ class ItemModel(db.Model):
         """
         return {
             'description': self.description,
-            'description':self.powerlevel
+            'description':self.powerlevel,
             'name': self.name,
             'price': self.price,
             '_id': self._id
