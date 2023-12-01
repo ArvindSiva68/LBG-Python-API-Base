@@ -14,6 +14,7 @@ class ItemModel(db.Model):
 
     _id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(TEXT))
+    powerlevel= db.Column(db.Integer)
     name = db.Column(db.String(STRING))
     price = db.Column(db.Float())
 
@@ -22,6 +23,7 @@ class ItemModel(db.Model):
         class constructor
         """
         self.description = description
+        self.powerlevel
         self.name = name
         self.price = price
         self._id = _id
@@ -30,7 +32,7 @@ class ItemModel(db.Model):
         """
         string representation method for object
         """
-        return f"'description':{self.description},'name':{self.name},'price':{self.price},'_id':{self._id}"
+        return f"'description':{self.description},'powerlevel':{self.powerlevel},'name':{self.name},'price':{self.price},'_id':{self._id}"
 
     @property
     def serialize(self) -> dict[str, str | int | float]:
@@ -39,6 +41,7 @@ class ItemModel(db.Model):
         """
         return {
             'description': self.description,
+            'description':self.powerlevel
             'name': self.name,
             'price': self.price,
             '_id': self._id

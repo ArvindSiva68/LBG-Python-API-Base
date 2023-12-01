@@ -30,7 +30,7 @@ db.init_app(app)
 _id = 1
 
 
-def item_builder(item_name: str, item_description: str, item_powerlevel: str, item_price: float, item_id: int) -> dict:
+def item_builder(item_name: str, item_description: str, item_powerlevel: int, item_price: float, item_id: int) -> dict:
     """
     Function to build an item
     takes in a name, description, price, and id
@@ -73,7 +73,7 @@ def create():
     description = posted_data['description']
     powerlevel = posted_data['powerlevel']
     price = posted_data['price']
-    item = item_builder(name, description, powerlevel, float(price), int(_id))
+    item = item_builder(name, description, int(powerlevel), float(price), int(_id))
 
     # insert the item into our Database
     item = ItemModel(**item)
@@ -158,7 +158,7 @@ def update_one(_id):
     description = posted_data['description']
     powerlevel = posted_data['powerlevel']
     price = posted_data['price']
-    updated_item = item_builder(name, description, price, int(_id))
+    updated_item = item_builder(name, description, int(powerlevel), price, int(_id))
 
     # find data in database BY using the id
     item = ItemModel.query.filter_by(_id=int(_id)).first()
