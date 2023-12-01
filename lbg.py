@@ -30,7 +30,7 @@ db.init_app(app)
 _id = 1
 
 
-def item_builder(item_name: str, item_description: str, item_price: float, item_id: int) -> dict:
+def item_builder(item_name: str, item_description: str, item_power_level: int, item_price: float, item_id: int) -> dict:
     """
     Function to build an item
     takes in a name, description, price, and id
@@ -39,6 +39,7 @@ def item_builder(item_name: str, item_description: str, item_price: float, item_
     item: dict[str | int | float] = {
         "name": item_name,
         "description": item_description,
+        "power_level" : item_power_level
         "price": item_price,
         "_id": item_id,
     }
@@ -70,8 +71,9 @@ def create():
     posted_data = request.get_json()
     name = posted_data['name']
     description = posted_data['description']
+    power_level = posted_data['power_level']
     price = posted_data['price']
-    item = item_builder(name, description, float(price), int(_id))
+    item = item_builder(name, description, power_level, float(price), int(_id))
 
     # insert the item into our Database
     item = ItemModel(**item)
@@ -154,6 +156,7 @@ def update_one(_id):
     posted_data = request.get_json()
     name = posted_data['name']
     description = posted_data['description']
+    power_level = posted_data['power_level']
     price = posted_data['price']
     updated_item = item_builder(name, description, price, int(_id))
 
