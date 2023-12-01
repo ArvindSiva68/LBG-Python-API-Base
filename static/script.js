@@ -33,6 +33,7 @@ const get = () => {
 const post = () => {
   axios.post(`/create`, {   name : DOM.inputName.value,
                             description : DOM.inputDescription.value, 
+                            powerlevel : DOM.inputPowerlevel.value,
                             price : DOM.inputPrice.value})
     .then((response) => {
       console.log(response);
