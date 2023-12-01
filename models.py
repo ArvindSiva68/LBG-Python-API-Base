@@ -18,12 +18,12 @@ class ItemModel(db.Model):
     name = db.Column(db.String(STRING))
     price = db.Column(db.Float())
 
-    def __init__(self, _id: int, description: str, name: str, price: float):
+    def __init__(self, _id: int, description: str, powerlevel: int, name: str, price: float):
         """
         class constructor
         """
         self.description = description
-        self.powerlevel
+        self.powerlevel = powerlevel
         self.name = name
         self.price = price
         self._id = _id
