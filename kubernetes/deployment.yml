@@ -68,7 +68,7 @@ spec:
 
       - name: flask-container
 
-        image: arvindsiva68/proj3:latest
+        image: arvindsiva68/proj3v2:latest
 
         imagePullPolicy: Always
 
