@@ -64,7 +64,7 @@ pipeline {
             steps {
                 sh '''
                 kubectl apply -f ./kubernetes
-                kubectl set image deployment/flask-service task1=arvindsiva68/proj3:v${BUILD_NUMBER}
+                kubectl set image deployment/flask-service flask=arvindsiva68/proj3:v${BUILD_NUMBER}
                 '''
             }
         }
@@ -75,12 +75,12 @@ pipeline {
                     if (env.GIT_BRANCH == "origin/main") {
                         sh '''
                         kubectl apply -n prod -f ./kubernetes
-                        kubectl set image deployment/flask-service task1=arvindsiva68/proj3:prod-v${BUILD_NUMBER} -n prod
+                        kubectl set image deployment/flask-service flask=arvindsiva68/proj3:prod-v${BUILD_NUMBER} -n prod
                         '''
                     } else if (env.GIT_BRANCH == "origin/dev") {
                         sh '''
                         kubectl apply -n dev -f ./kubernetes
-                        kubectl set image deployment/flask-service task1=arvindsiva68/proj3:dev-v${BUILD_NUMBER} -n dev
+                        kubectl set image deployment/flask-service flask=arvindsiva68/proj3:dev-v${BUILD_NUMBER} -n dev
                         '''
                     } else {
                         sh '''
