@@ -1,35 +1,92 @@
 pipeline {
     agent any
-    environment {
-        PROJECT_ID = ' [PROJECT_ID_GOES_HERE] '
-        CLUSTER_NAME = 'demo-cluster'
-        LOCATION = 'europe-west2-c'
-        CREDENTIALS_ID = '[CREDENTIALS_ID_GOES_HERE(for the k8s service account)]'
-    }
-
     stages {
-        stage('Build and Push to Docker') {
+        stage('Init') {
             steps {
-                script {
+                script{
                     if (env.GIT_BRANCH == "origin/main") {
                         sh '''
-                        docker build -t arvindsiva68/flask-jenk:latest -t arvindsiva68/flask-jenk:prod-v${BUILD_NUMBER} .
+                        kubectl create namespace prod || echo "Namespace prod already exists"
+                        '''
+                    } else if (env.GIT_BRANCH == "origin/dev") {
+                        sh '''
+                        kubectl create namespace dev || echo "Namespace dev already exists"
                         '''
                     } else {
                         sh '''
                         echo "Branch not recognised"
-                        '''                       
+                        '''
                     }
-
                 }
-
             }
         }
-        stage('Deploy to GKE') {
+        stage('Build') {
             steps {
                 script {
-                    // Deploy to GKE using Jenkins Kubernetes Engine Plugin
-                    step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'kubernetes/deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+                    if (env.GIT_BRANCH == "origin/main") {
+                        sh '''
+                        docker build -t arvindsiva68/proj3:latest -t arvindsiva68/proj3:prod-v${BUILD_NUMBER} .
+                        '''
+                    } else if (env.GIT_BRANCH == "origin/dev") {
+                        sh '''
+                        docker build -t arvindsiva68/proj3:latest -t arvindsiva68/proj3:dev-v${BUILD_NUMBER} .
+                        '''
+                    } else {
+                        sh '''
+                        echo "Branch not recognised"
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Push') {
+            steps {
+                script{
+                    if (env.GIT_BRANCH == "origin/main") {
+                        sh '''
+                        docker push arvindsiva68/proj3:latest
+                        docker push arvindsiva68/proj3:prod-v${BUILD_NUMBER}
+                        '''
+                    } else if (env.GIT_BRANCH == "origin/dev") {
+                        sh '''
+                        docker push arvindsiva68/proj3:latest
+                        docker push arvindsiva68/proj3:dev-v${BUILD_NUMBER}
+                        '''
+                    } else {
+                        sh '''
+                        echo "Branch not recognised"
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh '''
+                kubectl apply -f ./kubernetes
+                kubectl set image deployment/flask-deployment task1=arvindsiva68/proj3:v${BUILD_NUMBER}
+                '''
+            }
+        }
+
+        stage('CleanUp') {
+            steps {
+                script{
+                    if (env.GIT_BRANCH == "origin/main") {
+                        sh '''
+                        kubectl apply -n prod -f ./kubernetes
+                        kubectl set image deployment/flask-deployment task1=arvindsiva68/proj3:prod-v${BUILD_NUMBER} -n prod
+                        '''
+                    } else if (env.GIT_BRANCH == "origin/dev") {
+                        sh '''
+                        kubectl apply -n dev -f ./kubernetes
+                        kubectl set image deployment/flask-deployment task1=arvindsiva68/proj3:dev-v${BUILD_NUMBER} -n dev
+                        '''
+                    } else {
+                        sh '''
+                        echo "Branch not recognised"
+                        '''
+                    }
                 }
             }
         }
