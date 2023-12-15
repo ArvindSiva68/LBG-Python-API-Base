@@ -25,11 +25,11 @@ pipeline {
                 script {
                     if (env.GIT_BRANCH == "origin/main") {
                         sh '''
-                        docker build -t arvindsiva68/proj3v2:latest -t arvindsiva68/proj3v2:prod-v${BUILD_NUMBER} .
+                        docker build -t gcr.io/lbg-mea-16/proj3v2:latest -t gcr.io/lbg-mea-16/proj3v2:prod-v${BUILD_NUMBER} .
                         '''
                     } else if (env.GIT_BRANCH == "origin/dev") {
                         sh '''
-                        docker build -t arvindsiva68/proj3v2:latest -t arvindsiva68/proj3v2:dev-v${BUILD_NUMBER} .
+                        docker build -t gcr.io/lbg-mea-16/proj3v2:latest -t gcr.io/lbg-mea-16/proj3v2:dev-v${BUILD_NUMBER} .
                         '''
                     } else {
                         sh '''
@@ -44,13 +44,13 @@ pipeline {
                 script{
                     if (env.GIT_BRANCH == "origin/main") {
                         sh '''
-                        docker push arvindsiva68/proj3v2:latest
-                        docker push arvindsiva68/proj3v2:prod-v${BUILD_NUMBER}
+                        docker push gcr.io/lbg-mea-16/proj3v2:latest
+                        docker push gcr.io/lbg-mea-16/proj3v2:prod-v${BUILD_NUMBER}
                         '''
                     } else if (env.GIT_BRANCH == "origin/dev") {
                         sh '''
-                        docker push arvindsiva68/proj3v2:latest
-                        docker push arvindsiva68/proj3v2:dev-v${BUILD_NUMBER}
+                        docker push gcr.io/lbg-mea-16/proj3v2:latest
+                        docker push gcr.io/lbg-mea-16/proj3v2:dev-v${BUILD_NUMBER}
                         '''
                     } else {
                         sh '''
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 sh '''
                 kubectl apply -f ./kubernetes
-                kubectl set image deployment/flask-service flask-container=arvindsiva68/proj3v2:v${BUILD_NUMBER}
+                kubectl set image deployment/flask-service flask-container=gcr.io/lbg-mea-16/proj3v2:v${BUILD_NUMBER}
                 '''
             }
         }
@@ -75,12 +75,12 @@ pipeline {
                     if (env.GIT_BRANCH == "origin/main") {
                         sh '''
                         kubectl apply -n prod -f ./kubernetes
-                        kubectl set image deployment/flask-service flask-container=arvindsiva68/proj3v2:prod-v${BUILD_NUMBER} -n prod
+                        kubectl set image deployment/flask-service flask-container=gcr.io/lbg-mea-16/proj3v2:prod-v${BUILD_NUMBER} -n prod
                         '''
                     } else if (env.GIT_BRANCH == "origin/dev") {
                         sh '''
                         kubectl apply -n dev -f ./kubernetes
-                        kubectl set image deployment/flask-service flask-container=arvindsiva68/proj3v2:dev-v${BUILD_NUMBER} -n dev
+                        kubectl set image deployment/flask-service flask-container=gcr.io/lbg-mea-16/proj3v2:dev-v${BUILD_NUMBER} -n dev
                         '''
                     } else {
                         sh '''
